@@ -33,7 +33,6 @@ for name in glob("*.i"):
         F=open("keff.csv",'a')
         F.write(f"{name[:name.find('.')]},{name[name.find('.')+1:name.find('_')]},{item[0]},{item[1]}\n")
         F.close()
-        it+=1
     # remove(name[:len(name)-1]+".r")
     # remove(name[:len(name)-1]+".s")
     system(f'title: Automata')
