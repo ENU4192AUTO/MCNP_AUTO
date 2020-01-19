@@ -8,7 +8,7 @@ hierarchy should look like this
 
 
 MCNP_Folder
-
+      
       |
   
       |__> FileName.i
