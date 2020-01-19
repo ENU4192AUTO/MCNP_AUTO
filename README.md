@@ -9,17 +9,17 @@ hierarchy should look like this
 
 MCNP_Folder
 
-  |
+   |
   
-  |__> FileName.i
+   |__> FileName.i
   
-  |
+   |
   
-  |__>FileName2.i
+    |__>FileName2.i
   
-  |
+   |
   
-  |__>MCNP_Runner
+   |__>MCNP_Runner
   
          |
          
