@@ -15,7 +15,7 @@ logo = G.read()
 G.close()
 chdir("..")
 logo=eval(f'f"""{logo}"""')
-print(f"{logo}The program will run {len(glob('*.i'))} .i files")
+print(f"{logo}\nThe program will run {len(glob('*.i'))} .i files")
 
 try:
     F=open("keff.csv",'r')
