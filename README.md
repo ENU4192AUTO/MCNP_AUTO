@@ -9,36 +9,36 @@ hierarchy should look like this
 
 MCNP_Folder
 
-   |
+      |
   
-   |__> FileName.i
+      |__> FileName.i
   
-   |
+      |
   
-    |__>FileName2.i
+      |__>FileName2.i
   
-   |
+      |
   
-   |__>MCNP_Runner
+      |__>MCNP_Runner
   
-         |
-         
-         |__>auto.py
-         
-         |
-         |__>ascension.py
-         
-         |
-         
-         |__>duel.mp3
-         
-         |
-         
-         |__>requirements.txt
-         
-         |
-         
-         |__>etc.
+            |
+
+            |__>auto.py
+
+            |
+            |__>ascension.py
+
+            |
+
+            |__>duel.mp3
+
+            |
+
+            |__>requirements.txt
+
+            |
+
+            |__>etc.
          
 To run the .i files execute auto.py with  python either through terminal or by double clicking
 
