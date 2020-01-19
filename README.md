@@ -6,6 +6,7 @@ Place the folder containing auto.py into the same folder as your mcnp files
 
 hierarchy should look like this
 
+
 MCNP_Folder
 
   |
@@ -13,6 +14,7 @@ MCNP_Folder
   |__> FileName.i
   
   |
+  
   |__>FileName2.i
   
   |
