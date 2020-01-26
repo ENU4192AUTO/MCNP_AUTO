@@ -1,3 +1,5 @@
+from os import rename, remove,chdir, system
+
 try:
     from Ascension import runner
     from glob import glob
@@ -17,22 +19,36 @@ chdir("..")
 logo=eval(f'f"""{logo}"""')
 print(f"{logo}\nThe program will run {len(glob('*.i'))} .i files")
 
-try:
-    F=open("keff.csv",'r')
-    F.close()
-except:
-    F=open("keff.csv",'w')
-    F.write("Material,Secondary,K_eff,1-Sigma\n")
-    F.close()
+# try:
+    # F=open("keff.csv",'r')
+    # F.close()
+# except:
+    # F=open("keff.csv",'w')
+    # F.write("Material,Secondary,K_eff,1-Sigma\n")
+    # F.close()
 for name in glob("*.i"):
     print(name)
     system(f'title Now Running:  {name}')
-    toaddr,keff=runner(name)
-
-    for item in keff:
-        F=open("keff.csv",'a')
-        F.write(f"{name[:name.find('.')]},{name[name.find('.')+1:name.find('_')]},{item[0]},{item[1]}\n")
+    Burnstate,keff=runner(name)
+    print(Burnstate)
+    if Burnstate:
+        print(keff)
+        keff=keff.replace("       ",",")
+        keff=keff.replace("     ",",")
+        keff=keff.replace("    ",",")
+        keff=keff.replace("   ",",")
+        keff=keff.replace("  ",",")
+        keff= keff.replace(" step",", step")
+        keff= keff.replace(", ","")
+        print(keff)
+        F=open("results.csv",'a')
+        F.write(f"{name[:name.find('.')]},{name[name.find('.')+1:name.find('_')]}\n{keff}\n")
         F.close()
+    else:
+        for item in keff:
+            F=open("keff.csv",'a')
+            F.write(f"{name[:name.find('.')]},{name[name.find('.')+1:name.find('_')]},{item[0]},{item[1]}\n")
+            F.close()
     # remove(name[:len(name)-1]+".r")
     # remove(name[:len(name)-1]+".s")
     system(f'title: Automata')

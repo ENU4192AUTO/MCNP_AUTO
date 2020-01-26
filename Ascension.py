@@ -8,26 +8,44 @@ import multiprocessing
 global File_Location
 File_Location=str(os.getcwd())
 def retriveemail(line):
-    if "Email:" in line:
-        emailadd=line[line.find(":")+1:len(line)-1]
-        return(emailadd)
+    if "BURN" in line:
+        return(True)
 def findkeff(line):
     if "keff =" in line:
         keff=line[73:81]
         std=line[122:129]
         return(keff,std)
 def runner(name):
+    chart=False
+    toaddr=""
+    keff=""
+    mixer.init()
+    mixer.music.load('MCNP_AUTO/duel.mp3')
+    mixer.music.play()
     cpunum=(multiprocessing.cpu_count())
     G=open(name)
-    toaddr=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(line) for line in G.readlines()))))
+    BURNSTATE=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(line) for line in G.readlines()))))
+    print(BURNSTATE)
     G.close()
     run_file=name
     short=str(os.path.expanduser('~/mcnp_env_620.bat'))
     input=run_file
     os.system(f"{short}&& mcnp6 i={input} n={input[:len(input)-1]} tasks {cpunum-1}")
     outputname=input[:len(input)-1]+"o"
+
     with open(outputname,'r') as f:
-        keff=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(findkeff)(line) for line in f.readlines()))))
-        if keff.size==0:
-            keff=["no keff returned"]
-        return(toaddr,keff)
+        if BURNSTATE:
+            for line in f.readlines():
+                if chart and "         (days)    (days)      (MW)                                           (GWd/MTU)  (nts/sec)" not in line and "nuclide data are sorted by decreasing" not in line:
+                    keff=keff+line
+                if " step  duration     time       power     keff      flux    ave. nu    ave. q    burnup     source" in line:
+                    keff=keff+line
+                    chart=True
+                elif "nuclide data are sorted by decreasing" in line:
+                    chart=False
+        else:
+            keff=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(findkeff)(line) for line in f.readlines()))))
+            if keff.size==0:
+                keff=["no keff returned"]
+        mixer.music.stop()
+        return(BURNSTATE[0],keff)
