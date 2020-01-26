@@ -36,12 +36,11 @@ def runner(name):
     with open(outputname,'r') as f:
         if BURNSTATE:
             for line in f.readlines():
-                if chart and "         (days)    (days)      (MW)                                           (GWd/MTU)  (nts/sec)" not in line and "nuclide data are sorted by decreasing" not in line:
+                if chart and "         (days)    (days)      (MW)                                           (GWd/MTU)  (nts/sec)" not in line and "nuclide data are sorted by decreasing" not in line and " Individual Material Burnup" not in line:
                     keff=keff+line
                 if " step  duration     time       power     keff      flux    ave. nu    ave. q    burnup     source" in line:
-                    keff=keff+line
                     chart=True
-                elif "nuclide data are sorted by decreasing" in line:
+                elif "nuclide data are sorted by decreasing" in line or " Individual Material Burnup" in line:
                     chart=False
         else:
             keff=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(findkeff)(line) for line in f.readlines()))))
