@@ -39,7 +39,8 @@ for name in glob("*.i"):
         keff=keff.replace("   ",",")
         keff=keff.replace("  ",",")
         keff= keff.replace(" step",", step")
-        keff= keff.replace(", ","")
+        for i in range(100):
+            keff=keff.replace(f",{i},",f"{i},")
         print(keff)
         F=open("results.csv",'a')
         F.write(f"{name[:name.find('.')]},{name[name.find('.')+1:name.find('_')]}\n{keff}\n")
