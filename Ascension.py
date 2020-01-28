@@ -25,7 +25,6 @@ def spacecut(keff):
         keff=keff.replace(f",{i},",f"{i},")
     return(keff)
 def runner(name):
-    BURNSTATE=[False]
     chart=False
     toaddr=""
     keff=""
@@ -38,7 +37,10 @@ def runner(name):
     cpunum=(multiprocessing.cpu_count())
     G=open(name)
     BURNSTATE=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(line) for line in G.readlines()))))
-    print(BURNSTATE)
+    try:
+        BURNSTATE[0]
+    except:
+        BURNSTATE=np.asarray([False])
     G.close()
     run_file=name
     short=str(os.path.expanduser('~/mcnp_env_620.bat'))
