@@ -26,25 +26,15 @@ for name in glob("*.i"):
     Burnstate,keff=runner(name)
     print(Burnstate)
     if Burnstate:
-            try:
-                F=open("results.csv",'r')
-                F.close()
-            except:
-                F=open("results.csv",'w')
-                F.write("step,duration,time,power,keff,flux,ave. nu,ave. q,burnup,source")
-                F.close()
-        print(keff)
-        keff=keff.replace("       ",",")
-        keff=keff.replace("     ",",")
-        keff=keff.replace("    ",",")
-        keff=keff.replace("   ",",")
-        keff=keff.replace("  ",",")
-        keff= keff.replace(" step",", step")
-        for i in range(100):
-            keff=keff.replace(f",{i},",f"{i},")
-        print(keff)
+        try:
+            F=open("results.csv",'r')
+            F.close()
+        except:
+            F=open("results.csv",'w')
+            F.write("FirstVar,SecondVar,step,duration,time,power,keff,flux,ave. nu,ave. q,burnup,source\n")
+            F.close()
         F=open("results.csv",'a')
-        F.write(f"{name[:name.find('.')]},{name[name.find('.')+1:name.find('_')]}\n{keff}\n")
+        F.write(f"{keff}")
         F.close()
     else:
         for item in keff:

@@ -15,6 +15,15 @@ def findkeff(line):
         keff=line[73:81]
         std=line[122:129]
         return(keff,std)
+def spacecut(keff):
+    keff=keff.replace("       ",",")
+    keff=keff.replace("     ",",")
+    keff=keff.replace("    ",",")
+    keff=keff.replace("   ",",")
+    keff=keff.replace("  ",",")
+    for i in range(10000):
+        keff=keff.replace(f",{i},",f"{i},")
+    return(keff)
 def runner(name):
     chart=False
     toaddr=""
@@ -37,7 +46,7 @@ def runner(name):
         if BURNSTATE:
             for line in f.readlines():
                 if chart and "         (days)    (days)      (MW)                                           (GWd/MTU)  (nts/sec)" not in line and "nuclide data are sorted by decreasing" not in line and " Individual Material Burnup" not in line:
-                    keff=keff+line
+                    keff=f"{keff}{outputname[:outputname.find('.')]},{outputname[outputname.find('.')+1:outputname.find('_')]},{spacecut(line)}"
                 if " step  duration     time       power     keff      flux    ave. nu    ave. q    burnup     source" in line:
                     chart=True
                 elif "nuclide data are sorted by decreasing" in line or " Individual Material Burnup" in line:
