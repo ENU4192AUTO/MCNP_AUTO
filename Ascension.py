@@ -25,6 +25,7 @@ def spacecut(keff):
         keff=keff.replace(f",{i},",f"{i},")
     return(keff)
 def runner(name):
+    BURNSTATE=[False]
     chart=False
     toaddr=""
     keff=""
