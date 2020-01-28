@@ -28,9 +28,12 @@ def runner(name):
     chart=False
     toaddr=""
     keff=""
-    mixer.init()
-    mixer.music.load('MCNP_AUTO/duel.mp3')
-    mixer.music.play()
+    try:
+        mixer.init()
+        mixer.music.load('MCNP_AUTO/duel.mp3')
+        mixer.music.play()
+    except:
+        print("Music file not found")
     cpunum=(multiprocessing.cpu_count())
     G=open(name)
     BURNSTATE=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(line) for line in G.readlines()))))
@@ -55,5 +58,8 @@ def runner(name):
             keff=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(findkeff)(line) for line in f.readlines()))))
             if keff.size==0:
                 keff=["no keff returned"]
-        mixer.music.stop()
+        try:
+            mixer.music.stop()
+        except:
+            print("")
         return(BURNSTATE[0],keff)
