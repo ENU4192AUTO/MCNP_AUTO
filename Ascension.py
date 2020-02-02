@@ -2,13 +2,14 @@ import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 from pygame import mixer
 import time
+import random
+import glob
 import numpy as np
 from joblib import Parallel, delayed
 import multiprocessing
 global File_Location
 File_Location=str(os.getcwd())
 def retriveemail(line,keyword):
-    print(keyword)
     if f"{keyword}" in line:
         return(True)
 def findkeff(line):
@@ -28,8 +29,10 @@ def runner(name):
     toaddr=""
     keff=""
     try:
+        opt=glob.glob('MCNP_AUTO/Music/*.mp3')
+        music=opt[random.randint(0,len(opt))]
         mixer.init()
-        mixer.music.load('MCNP_AUTO/duel.mp3')
+        mixer.music.load(music)
         mixer.music.play()
     except:
         print("Music file not found")
@@ -75,7 +78,7 @@ def runner(name):
             if keff.size==0:
                 keff=["no keff returned"]
         try:
-            mixer.music.stop()
+            mixer.music.fadeout()
         except:
             print("")
         return(BURNSTATE[0],Meshstate[0],Emesh,keff)
