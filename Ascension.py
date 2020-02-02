@@ -10,7 +10,7 @@ import multiprocessing
 global File_Location
 File_Location=str(os.getcwd())
 def retriveemail(line,keyword):
-    if f"{keyword}" in line:
+    if keyword.lower() in line.lower():
         return(True)
 def findkeff(line):
     if "keff =" in line:
