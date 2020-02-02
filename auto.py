@@ -22,7 +22,6 @@ print(f"{logo}\nThe program will run {len(glob('*.i'))} .i files")
 
 for name in glob("*.i"):
     print(name)
-    system(f'title Now Running:  {name}')
     Burnstate,Meshstate,Emesh,keff=runner(name)
     print(Burnstate)
     if Burnstate:

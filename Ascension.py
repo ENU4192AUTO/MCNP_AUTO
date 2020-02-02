@@ -30,8 +30,9 @@ def runner(name):
     keff=""
     try:
         opt=glob.glob('MCNP_AUTO/Music/*.mp3')
-        music=opt[random.randint(0,len(opt))]
+        music=opt[random.randint(0,len(opt)+1)]
         mixer.init()
+        os.system(f'title Now Playing:  {music}')
         mixer.music.load(music)
         mixer.music.play()
     except:

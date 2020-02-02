@@ -79,9 +79,9 @@ def TallyChanger(tallyfile,Emesh):
                     G.write('X,Y,Z,Result,Rel_Error, \n')
                 for l, sete in enumerate(Returns):
                     if l==0:
-                       G.write(sete[1:]) 
+                       G.write(sete[2:]) 
                     else:
-                        G.write(sete)
+                        G.write(sete[1:])
                 G.close()
     os.chdir('Tal_result')
     counter=0
