@@ -39,14 +39,14 @@ def runner(name):
         print("Music file not found")
     cpunum=(multiprocessing.cpu_count())
     G=open(name)
-    BURNSTATE=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(line,"BURN") for line in G.readlines()))))
+    BURNSTATE=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(line,"BURN ") for line in G.readlines()))))
     try:
         BURNSTATE[0]
     except:
         BURNSTATE=np.asarray([False])
     G.close()
     G=open(name)
-    Meshstate=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(meshline,"FMESH") for meshline in G.readlines()))))
+    Meshstate=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(meshline,"FMESH ") for meshline in G.readlines()))))
     try:
         Meshstate[0]
     except:
