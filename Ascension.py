@@ -7,8 +7,9 @@ from joblib import Parallel, delayed
 import multiprocessing
 global File_Location
 File_Location=str(os.getcwd())
-def retriveemail(line):
-    if "BURN" in line:
+def retriveemail(line,keyword):
+    print(keyword)
+    if f"{keyword}" in line:
         return(True)
 def findkeff(line):
     if "keff =" in line:
@@ -16,12 +17,10 @@ def findkeff(line):
         std=line[122:129]
         return(keff,std)
 def spacecut(keff):
-    keff=keff.replace("       ",",")
-    keff=keff.replace("     ",",")
-    keff=keff.replace("    ",",")
-    keff=keff.replace("   ",",")
-    keff=keff.replace("  ",",")
-    for i in range(10000):
+    keff=keff.replace(" ",",")
+    while ',,' in keff:
+        keff.replace(',,',',')
+    for i in range(1000):
         keff=keff.replace(f",{i},",f"{i},")
     return(keff)
 def runner(name):
@@ -36,11 +35,25 @@ def runner(name):
         print("Music file not found")
     cpunum=(multiprocessing.cpu_count())
     G=open(name)
-    BURNSTATE=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(line) for line in G.readlines()))))
+    BURNSTATE=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(line,"BURN") for line in G.readlines()))))
     try:
         BURNSTATE[0]
     except:
         BURNSTATE=np.asarray([False])
+    G.close()
+    G=open(name)
+    Meshstate=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(meshline,"FMESH") for meshline in G.readlines()))))
+    try:
+        Meshstate[0]
+    except:
+        Meshstate=np.asarray([False])
+    G.close()
+    G=open(name)
+    Emesh=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(meshline,"EMESH") for meshline in G.readlines()))))
+    try:
+        Emesh[0]
+    except:
+        Emesh=np.asarray([False])
     G.close()
     run_file=name
     short=str(os.path.expanduser('~/mcnp_env_620.bat'))
@@ -65,4 +78,4 @@ def runner(name):
             mixer.music.stop()
         except:
             print("")
-        return(BURNSTATE[0],keff)
+        return(BURNSTATE[0],Meshstate[0],Emesh,keff)

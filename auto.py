@@ -1,10 +1,9 @@
 from os import rename, remove,chdir, system
 
 try:
+    from TallyScraper import TallyChanger
     from Ascension import runner
     from glob import glob
-    from os import rename, remove,chdir, system
-
     import numpy as np
 except:
     system("py -m pip install -r requirements.txt")
@@ -12,6 +11,7 @@ except:
     from glob import glob
     from os import  rename, remove,chdir, system
     import numpy as np
+    from TallyScraper import TallyChanger
 G=open("LOGO.txt")
 logo = G.read()
 G.close()
@@ -23,7 +23,7 @@ print(f"{logo}\nThe program will run {len(glob('*.i'))} .i files")
 for name in glob("*.i"):
     print(name)
     system(f'title Now Running:  {name}')
-    Burnstate,keff=runner(name)
+    Burnstate,Meshstate,Emesh,keff=runner(name)
     print(Burnstate)
     if Burnstate:
         try:
@@ -48,6 +48,9 @@ for name in glob("*.i"):
             F=open("keff.csv",'a')
             F.write(f"{name[:name.find('.')]},{name[name.find('.')+1:name.find('_')]},{item[0]},{item[1]}\n")
             F.close()
+    if Meshstate:
+        TallyChanger(name[:len(name)-1]+"msht",Emesh)
+        chdir("..")
     # remove(name[:len(name)-1]+".r")
     # remove(name[:len(name)-1]+".s")
     system(f'title: Automata')
