@@ -44,7 +44,7 @@ def runner(name):
         BURNSTATE=np.asarray([False])
     G.close()
     G=open(name)
-    Meshstate=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(meshline,"FMESH") for meshline in G.readlines()))))
+    Meshstate=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(meshline,"FMESH ") for meshline in G.readlines()))))
     try:
         Meshstate[0]
     except:
