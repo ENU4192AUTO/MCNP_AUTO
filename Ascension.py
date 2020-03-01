@@ -7,8 +7,6 @@ import glob
 import numpy as np
 from joblib import Parallel, delayed
 import multiprocessing
-global File_Location
-File_Location=str(os.getcwd())
 def retriveemail(line,keyword):
     if keyword.lower() in line.lower():
         return(True)
@@ -20,7 +18,7 @@ def findkeff(line):
 def spacecut(keff):
     keff=keff.replace(" ",",")
     while ',,' in keff:
-        keff.replace(',,',',')
+        keff=keff.replace(',,',',')
     for i in range(1000):
         keff=keff.replace(f",{i},",f"{i},")
     return(keff)
@@ -30,15 +28,16 @@ def runner(name):
     keff=""
     try:
         opt=glob.glob('MCNP_AUTO/Music/*.mp3')
-        music=opt[random.randint(0,len(opt))]
+        music=opt[random.randint(0,len(opt)+1)]
         mixer.init()
+        os.system(f'title Now Playing:  {music}')
         mixer.music.load(music)
         mixer.music.play()
     except:
         print("Music file not found")
     cpunum=(multiprocessing.cpu_count())
     G=open(name)
-    BURNSTATE=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(line,"BURN") for line in G.readlines()))))
+    BURNSTATE=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(line,"BURN ") for line in G.readlines()))))
     try:
         BURNSTATE[0]
     except:
@@ -52,7 +51,7 @@ def runner(name):
         Meshstate=np.asarray([False])
     G.close()
     G=open(name)
-    Emesh=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(meshline,"EMESH") for meshline in G.readlines()))))
+    Emesh=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(retriveemail)(meshline,"EMESH ") for meshline in G.readlines()))))
     try:
         Emesh[0]
     except:
@@ -74,7 +73,7 @@ def runner(name):
                 elif "nuclide data are sorted by decreasing" in line or " Individual Material Burnup" in line:
                     chart=False
         else:
-            keff=np.asarray(list(filter(None,Parallel(n_jobs=-1)(delayed(findkeff)(line) for line in f.readlines()))))
+            keff=np.asarray(list(filter(None,Parallel(n_jobs=-5)(delayed(findkeff)(line) for line in f.readlines()))))
             if keff.size==0:
                 keff=["no keff returned"]
         try:
@@ -82,3 +81,7 @@ def runner(name):
         except:
             print("")
         return(BURNSTATE[0],Meshstate[0],Emesh,keff)
+if __name__ == "__main__":
+    os.chdir("..")
+    filename=input("Enter the input filename to process:")
+    runner(filename)
