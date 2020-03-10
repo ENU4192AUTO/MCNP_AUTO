@@ -60,7 +60,6 @@ def auto(couplerun=False):
         rename(name,name+"np")
         if couplerun:
             return(name)
-        chdir("..")
 
 if __name__ == "__main__":
      
